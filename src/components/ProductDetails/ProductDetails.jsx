@@ -2,6 +2,7 @@ import React, { use, useEffect, useRef, useState } from "react";
 import { useLoaderData } from "react-router";
 import { AuthContext } from "../../contexts/AuthContext";
 import Swal from "sweetalert2";
+// import axios from "axios";
 
 const ProductDetails = () => {
   const { _id: productId } = useLoaderData();
@@ -15,7 +16,7 @@ const ProductDetails = () => {
                 headers: {
                     authorization: `Bearer ${user.accessToken}`
                 }
-        }
+      }
       
     )
       .then((res) => res.json())
@@ -23,6 +24,14 @@ const ProductDetails = () => {
         console.log("bids for this product", data);
         setBids(data);
       });
+  // axios method use 
+  //  axios
+  //   .get(`http://localhost:3000/products/bids/${productId}`)
+  //   .then(data => {
+      // console.log("after axios get", data);
+      // setBids(data.data);
+    // })
+    // .catch(err => console.log(err));
   }, [productId]);
 
   const handleBidModalOpen = () => {

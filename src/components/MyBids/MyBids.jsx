@@ -1,42 +1,37 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const MyBids = () => {
   const { user } = use(AuthContext);
-  const bidModalRef = useRef(null);
-  const [bids, setBids] = useState([]);
+  // console.log('token  : ', user.accessToken)
 
-  console.log('token ta holo ze : ', user.accessToken)
+  // const bidModalRef = useRef(null);
+  const [bids, setBids] = useState([]);
+  const axioSecure = useAxiosSecure();
+
 
     useEffect(() => {
-        if (user?.email) {
-            fetch(`http://localhost:3000/bids?email=${user.email}`, {
-                headers: {
-                    authorization: `Bearer ${user.accessToken}`
-                }
-            })
-                .then(res => res.json())
-                .then(data => {
+      axioSecure.get(`/bids?email=${user.email}`)
+                   .then(data => {
                     console.log(data);
-                    setBids(data)
+                    setBids(data.data)
                 })
-        }
+        // if (user?.email) {
+        //     fetch(`http://localhost:3000/bids?email=${user.email}`, {
+        //         headers: {
+        //             authorization: `Bearer ${user.accessToken}`
+        //         }
+        //     })
+        //         .then(res => res.json())
+        //         .then(data => {
+        //             console.log(data);
+        //             setBids(data)
+        //         })
+        // }
     }, [user])
-    // useEffect(() => {
-    //     if (user?.email) {
-    //         fetch(`http://localhost:3000/products/bids${productId}`, {
-    //             headers: {
-    //                 authorization: `Bearer ${user.accessToken}`
-    //             }
-    //         })
-    //             .then(res => res.json())
-    //             .then(data => {
-    //                 console.log('bids for this project', data);
-    //                 setBids(data)
-    //             })
-    //     }
-    // }, [productId, user])
+
 
 
   const handleDeleteBid = (_id) => {
